@@ -36,7 +36,7 @@ The Vivado IP blocks used in the block design are documented in
 │   ├── 📁 synthetis
 │   ├── 📄 ov7670_capture.ipynb
 │   ├── 📄 capture_frame.tcl
-│   ├── 📄 *.bin
+│   ├── 📄 *.hex
 │   └── 📄 *.png
 ├── 📁 ip-block-design
 │   ├── 📁 clocking_wizard
@@ -93,9 +93,9 @@ Hardware verification of a real OV7670 capture stored in DDR3:
 
 - [capture_frame.tcl](verifications/capture_frame.tcl): run in the Vivado
   Hardware Manager to read a captured frame from DDR3 through the JTAG to AXI
-  Master and save it to a `.bin` file.
+  Master and save it to a `.hex` file.
 - [ov7670_capture.ipynb](verifications/ov7670_capture.ipynb): converts the
-  `.bin` file into an image so the captured frame can be shown.
+  `.hex` files into images so the captured frame can be shown.
 
 ### XDC
 

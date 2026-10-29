@@ -200,7 +200,35 @@ results (STA, resource utilization and on-chip power):
 
 ### Demo
 
-_TBD_
+[![Demo preview, click to open the full video](assets/documentation_preview.gif)](assets/documentation.mp4)
+
+The preview above is 3× faster; click it to open the full video. The full
+video [documentation.mp4](assets/documentation.mp4) shows the
+[PROCESSING-VIDEO-STREAM](ip-block-design/PROCESSING-VIDEO-STREAM/INFO.md)
+design running on the board, with the VGA output on a projector:
+
+- **ROI preview**: the 280 × 280 region of interest in the centre of the frame,
+  with the original colour frame around it.
+- **Inverted**: the inverted grayscale of the ROI.
+- **Thresholding**: thresholding of the ROI on continuous frames, with the
+  threshold changed by BTN2/BTN3 while streaming.
+
+#### Grayscale modes
+
+![Grayscale modes on a handwritten digit](assets/grayscale_mode.png)
+
+A handwritten digit captured in each grayscale mode of the frame processor,
+shown as the ROI downsampled to 28 × 28. The labels in the image are the mode
+codes inside [rgb444_to_grayscale](rtl/rgb444_to_grayscale.v), which are set
+by the board switches as follows:
+
+| image label | grayscale source | SW2 SW1 SW0 |
+| --- | --- | --- |
+| `000: invert` | inverted luma | `1 1 1` |
+| `001: red` | red channel | `0 0 1` |
+| `010: green` | green channel | `0 1 0` |
+| `011: blue` | blue channel | `1 0 0` |
+| `100: rgb_gray` | luma, Y = (77·R + 150·G + 29·B) / 256 | any other setting |
 
 ## Limitations
 

@@ -44,7 +44,19 @@ them, down to three levels below the top. All files are in [rtl](../../rtl/).
 | [vga_rgb444](../../rtl/vga_rgb444.v) | `resetn_sync` | 640 × 480 VGA timing generator with RGB444 output |
 
 ## CONSTRAIN FILE
-the target constrain file is **`base_stream.xdc`**
+the target constrain file is **[xdc/stream_only/base.xdc](../../xdc/stream_only/base.xdc)**
+
+> **Disclaimer:** this file matches the block design `design_stream` on the
+> Arty A7-100. Adjust it if your project is different:
+> - The asynchronous clock group finds the VGA clock by its name,
+>   `clk_out3_design_stream_clk_wiz_0_0`. Vivado puts the block design name in
+>   this name, so update it if you name the block design differently,
+>   otherwise the clock group is dropped and timing fails. Alternatively, find
+>   the clock by its pin as in
+>   [processed_frame/base.xdc](../../xdc/processed_frame/base.xdc).
+> - The port names must match the HDL wrapper ports listed below.
+> - The package pins are for the Arty A7-100 with the camera on JA/JB and the
+>   Pmod VGA on JC/JD. Change them for another board or wiring.
 
 ## BLOCK DESIGNS
 

@@ -34,6 +34,8 @@ The Vivado IP blocks used in the block design are documented in
 ├── 📁 tb
 ├── 📁 verifications
 │   ├── 📁 synthetis
+│   │   ├── 📁 stream_only
+│   │   └── 📁 processed_frame
 │   ├── 📄 ov7670_capture.ipynb
 │   ├── 📄 capture_frame.tcl
 │   ├── 📄 *.hex
@@ -46,6 +48,8 @@ The Vivado IP blocks used in the block design are documented in
 │   ├── 📁 smartconnect
 │   └── 📁 utility_buffer
 ├── 📁 xdc
+│   ├── 📁 stream_only
+│   └── 📁 processed_frame
 ├── 📄 CITATION
 ├── 📄 LICENSE
 └── 📝 README.md
@@ -99,8 +103,16 @@ Hardware verification of a real OV7670 capture stored in DDR3:
 
 ### XDC
 
-[base.xdc](xdc/base.xdc) holds the pin assignment, I/O standard (LVCMOS33),
-clock constraints and CDC constraints of the design. The physical wiring of
+Each implementation scheme has its own constraint file, holding the pin
+assignment, I/O standard (LVCMOS33), clock constraints and CDC constraints:
+
+- [stream_only/base.xdc](xdc/stream_only/base.xdc) for the
+  [VIDEO-STREAM](ip-block-design/VIDEO-STREAM/INFO.md) block design.
+- [processed_frame/base.xdc](xdc/processed_frame/base.xdc) for the
+  [PROCESSING-VIDEO-STREAM](ip-block-design/PROCESSING-VIDEO-STREAM/INFO.md)
+  block design. It adds the switch and button pins of the frame processor.
+
+The camera and VGA pins are the same in both files. The physical wiring of
 the camera and the VGA output on the Pmod connectors is described below.
 
 ![Pmod connector pinout](assets/ja-jb-jc-jd-connector.png)
@@ -115,7 +127,7 @@ JA1–JA4 (top row) and pin 7–10 means signal pins JA7–JA10 (bottom row).
 
 The OV7670 module (without FIFO) is wired with jumper cables to **JA** and
 **JB**. SCL and SDA use the internal FPGA pull-ups (`PULLTYPE PULLUP` in
-[base.xdc](xdc/base.xdc)).
+the XDC files).
 
 **UPPER JA**
 
@@ -146,7 +158,7 @@ The OV7670 module (without FIFO) is wired with jumper cables to **JA** and
 
 #### Digilent Pmod VGA `[JC and JD]`
 
-The pin assignment of JC and JD in [base.xdc](xdc/base.xdc) already matches
+The pin assignment of JC and JD in the XDC files already matches
 the **Digilent Pmod VGA**. No jumper cables are needed: plug **Pmod VGA J1
 into JC** and **Pmod VGA J2 into JD** directly. VCC and GND are supplied by
 the connectors themselves.
@@ -177,53 +189,18 @@ the connectors themselves.
 
 ## Result
 
-### STA
-
 Results are from the post-route reports of Vivado 2025.2 on
-`xc7a100tcsg324-1`.
+`xc7a100tcsg324-1`. Each implementation scheme has its own reports and
+results (STA, resource utilization and on-chip power):
 
-| WNS | TNS | WHS | THS | WPWS | TPWS |
-| --- | --- | --- | --- | --- | --- |
-| 1.316 ns | 0.000 ns | 0.050 ns | 0.000 ns | 0.206 ns | 0.000 ns |
+| Scheme | Block design | Results |
+| --- | --- | --- |
+| Stream only | [VIDEO-STREAM](ip-block-design/VIDEO-STREAM/INFO.md) | [stream_only/INFO.md](verifications/synthetis/stream_only/INFO.md) |
+| Processed frame | [PROCESSING-VIDEO-STREAM](ip-block-design/PROCESSING-VIDEO-STREAM/INFO.md) | [processed_frame/INFO.md](verifications/synthetis/processed_frame/INFO.md) |
 
-All user-specified timing constraints are met, with no failing endpoints. This
-covers the 100 MHz system clock, the 200 MHz MIG reference clock, the 25 MHz
-camera and VGA clocks and the ≈81.25 MHz MIG `ui_clk`.
+### Demo
 
-### Resource Utilization
-
-| Resource | Used | Available | Utilization |
-| --- | ---: | ---: | ---: |
-| LUT | 13142 | 63400 | 20.73% |
-| FF | 16297 | 126800 | 12.85% |
-| BRAM (tile) | 8 | 135 | 5.93% |
-| DSP | 0 | 240 | 0.00% |
-| IO | 88 | 210 | 41.90% |
-| BUFG | 9 | 32 | 28.13% |
-
-### On-Chip Power
-
-| Category | Power | Percentage |
-| --- | ---: | ---: |
-| Dynamic power | 0.796 W | 88% |
-| &emsp;Clocks | 0.050 W | 6% |
-| &emsp;Signals | 0.025 W | 3% |
-| &emsp;Logic | 0.022 W | 3% |
-| &emsp;BRAM | 0.004 W | <1% |
-| &emsp;DSP | 0.000 W | 0% |
-| &emsp;MMCM | 0.193 W | 24% |
-| &emsp;PLL | 0.115 W | 14% |
-| &emsp;PHASER | 0.110 W | 14% |
-| &emsp;XADC | 0.004 W | <1% |
-| &emsp;I/O | 0.273 W | 34% |
-| Device static power | 0.106 W | 12% |
-| Total On-Chip Power | 0.901 W | 100% |
-
-Dynamic power and device static power are percentages of the total on-chip
-power. The indented items are percentages of the dynamic power. The junction
-temperature is 29.1 °C. Vivado rates the confidence level of this estimate as
-**Low** because no switching activity from simulation was provided.
-
+_TBD_
 
 ## Limitations
 

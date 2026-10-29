@@ -72,8 +72,19 @@ them, down to three levels below the top. All files are in [rtl](../../rtl/).
 | [vga_rgb444](../../rtl/vga_rgb444.v) | `resetn_sync` | 640 × 480 VGA timing generator with RGB444 output |
 
 ## CONSTRAIN FILE
-the target constrain file is **`base.xdc`** in the constraint set
-`constrs_processed_stream`
+the target constrain file is **[xdc/processed_frame/base.xdc](../../xdc/processed_frame/base.xdc)**
+
+> **Disclaimer:** this file matches the block design `design_processed_stream`
+> on the Arty A7-100. Adjust it if your project is different:
+> - The asynchronous clock group finds the VGA clock by the pin
+>   `*/clk_wiz_0/clk_out3`, so it works with any block design name, but the
+>   Clocking Wizard instance must stay named `clk_wiz_0` with the VGA clock on
+>   `clk_out3`.
+> - The port names must match the HDL wrapper ports listed below, including
+>   `sw_mode[3:0]`, `higher_up_tresh` and `lower_down_tresh`.
+> - The package pins are for the Arty A7-100 with the camera on JA/JB, the
+>   Pmod VGA on JC/JD, SW0–SW3 and BTN2/BTN3. Change them for another board
+>   or wiring.
 
 ## BLOCK DESIGNS
 

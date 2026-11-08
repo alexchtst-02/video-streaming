@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it and its dependencies as follows."
+authors:
+  - family-names: "htst"
+    given-names: "alex"
+title: "video-streaming"
+version: "1.0.0"
+date-released: 2026-10-25
+
+references:
+  - type: software
+    title: "OV7670-camera"
+    authors:
+      - family-names: "-"
+        given-names: "amsacks"
+    repository-code: "https://github.com"
+    notes: "Used and modified files: https://github.com/amsacks/OV7670-camera/tree/main/rtl"
+
+
+  - type: software
+    title: "OV7670_ArtyA7"
+    authors:
+      - family-names: "-"
+        given-names: "Vogma"
+    repository-code: "https://github.com"
+    notes: "Used and modified files: https://github.com/vogma/OV7670_ArtyA7/tree/main/OV7670_ArtyA7_srcs/rtl"
